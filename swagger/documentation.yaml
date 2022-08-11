@@ -1,0 +1,153 @@
+swagger: '2.0'
+info:
+    description: Webserver with mongo.
+    version: 1.0.0
+    title: Webserver
+    contact:
+        email: giovanesantos1999@gmail.com
+    license:
+        name: MIT
+        url: https://opensource.org/licenses/MIT
+host: localhost:8000
+basePath: /api/v1
+schemes:
+    - http
+    - https
+tags:
+    - name: product
+      description: Crud for product store.
+paths:
+    /product:
+        post:
+            tags:
+                - product
+            summary: Add Product in store.
+            operationId: createProduct
+            consumes:
+                - application/x-www-form-urlencoded
+            produces:
+                - application/json
+            parameters:
+                - in: formData
+                  name: name
+                  description: Name of product
+                  required: true
+                  type: string
+                - in: formData
+                  name: price
+                  description: Price of product
+                  required: true
+                  type: number
+            responses:
+                201:
+                    description: Success operation
+                400:
+                    description: Invalid input data
+                409:
+                    description: Conflict product is registered
+                500:
+                    description: Internal server error
+        get:
+            tags:
+                - product
+            summary: Return all products in store.
+            operationId: getAllProduct
+            produces:
+                - application/json
+            responses:
+                200:
+                    description: Success operation
+                    schema:
+                        type: array
+                        items:
+                            $ref: '#/definitions/Product'
+                404:
+                    description: Not found products
+                500:
+                    description: Internal server error
+    /product/{id}:
+        get:
+            tags:
+                - product
+            summary: Returns product by ID in store.
+            operationId: getOnePruduct
+            produces:
+                - application/json
+            parameters:
+                - in: path
+                  name: id
+                  description: ID of product
+                  required: true
+                  type: string
+            responses:
+                200:
+                    description: Success operation
+                    schema:
+                        $ref: '#/definitions/Product'
+                404:
+                    description: Not found product
+                500:
+                    description: Internal server error
+        put:
+            tags:
+                - product
+            summary: Update product in sotore.
+            operationId: updateProduct
+            consumes:
+                - application/x-www-form-urlencoded
+            produces:
+                - application/json
+            parameters:
+                - in: path
+                  name: id
+                  description: ID of product
+                  required: true
+                  type: string
+                - in: formData
+                  name: name
+                  description: Name of product
+                  required: true
+                  type: string
+                - in: formData
+                  name: price
+                  description: Price of product
+                  required: true
+                  type: number
+            responses:
+                204:
+                    description: Success operation
+                404:
+                    description: Not found product
+                500:
+                    description: Internal server error
+        delete:
+            tags:
+                - product
+            summary: Delet product in store.
+            operationId: deleteProduct
+            produces:
+                - application/json
+            parameters:
+                - in: path
+                  name: id
+                  description: ID of product
+                  required: true
+                  type: string
+            responses:
+                204:
+                    description: Success operation
+                404:
+                    description: Not found product
+                500:
+                    description: Internal server error
+definitions:
+    Product:
+        type: object
+        properties:
+            id:
+                type: string
+            name:
+                type: string
+            price:
+                type: number
+                format: float

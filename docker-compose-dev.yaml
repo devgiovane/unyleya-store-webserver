@@ -1,0 +1,29 @@
+version: '3'
+services:
+    mongo:
+        image: mongo:latest
+        container_name: mongo
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: dfe4da18
+        ports:
+            - "27017:27017"
+        volumes:
+            - ./docker/mongo:/data/db
+        networks:
+            - webserver
+    documentation:
+        image: swaggerapi/swagger-ui
+        container_name: documentation
+        ports:
+            - "8080:8080"
+        volumes:
+            - ./swagger:/usr/share/nginx/html/swagger
+        environment:
+            URLS: '[{ url: "swagger/documentation.yaml", name: "Webserver" }]'
+        networks:
+            - webserver
+networks:
+    webserver:
+        name: webserver
+        driver: bridge
